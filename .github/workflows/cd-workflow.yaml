@@ -35,9 +35,9 @@ jobs:
           curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
           sudo apt-get update && sudo apt-get install -y google-cloud-sdk
       
-      # - name: Authenticate kubectl with GKE
-      #   run: |
-      #     gcloud container clusters get-credentials ${{ secrets.CLUSTER_NAME }} --zone your-cluster-zone --project ${{ secrets.GCP_PROJECT }}
+      - name: Authenticate kubectl with GKE
+        run: |
+          gcloud container clusters get-credentials ${{ secrets.CLUSTER_NAME }} --region ${{ secrets.REGION }} --project ${{ secrets.GCP_PROJECT }}
 
       - name: Verify kubectl
         run: |
@@ -45,7 +45,5 @@ jobs:
 
       - name: Deploy to Kubernetes
         run: |
-          echo "${{ secrets.KUBECONFIG_SECRET }}" | base64 -d > kubeconfig
-          export KUBECONFIG=kubeconfig
           kubectl apply -f k8s
 
