@@ -86,12 +86,34 @@ kubectl get svc -n $namespace
 
 Access your application at `http://<EXTERNAL_IP>`.
 
-### Testing the Application
+## Interacting with the application
 
-Use Postman to test the API endpoints:
+To access and manage the `Database` from your local machine, you can use `k9s` to port forward the service and then connect to it using MongoDB management tools like [Studio 3T](https://studio3t.com/download/) or [MongoDB Compass](https://www.mongodb.com/try/download/atlascli).
+
+### Accessing the Service with k9s
+
+1. Open `k9s` in your terminal.
+2. Navigate to the `services` section by typing `:svc` and pressing `Enter`.
+3. Search for the service named `mongo-app-service`.
+4. With the `mongo-app-service` highlighted, press `Shift+F` to set up port forwarding to your local machine.
+
+<img src=imgs/k9s-1.png>
+
+### Connecting to the Database
+
+Once you've port forwarded the `mongo-app-service`:
+
+1. Open Studio 3T or MongoDB Compass.
+2. Connect to the MongoDB instance using the localhost address and the port `27017`.
+
+<img src=imgs/mongo-compass.png>
+
+### Adding Data to the Database with Postman
+
+To interact with your application and add data to the MongoDB database:
 
 1. Open Postman.
-2. Set up a new POST request using your application's external IP.
+2. Set up a new POST request using your application's domain.
 3. In the request body, select `raw` and enter the following JSON:
 
    ```json
