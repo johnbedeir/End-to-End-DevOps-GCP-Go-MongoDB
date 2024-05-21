@@ -2,7 +2,7 @@
 
 # Variables
 cluster_name="cluster-1-testing-env" # If you wanna change the cluster name make sure you change it in the terraform directory variables.tf (name_prefix & environment)
-region="europe-west1-d"
+zone="europe-west1-d"
 project_id="johnydev"
 repo_name="goapp-survey" # If you wanna change the repository name make sure you change it in the k8s/app.yml (Image name) 
 image_name="gcr.io/${project_id}/$repo_name:latest"
@@ -18,7 +18,7 @@ grafana_svc="kube-prometheus-stack-grafana"
 helm repo update
 
 # Google cloud authentication
-#gcloud auth login
+gcloud auth login
 
 # Get GCP credentials
 gcloud iam service-accounts keys create terraform/gcp-credentials.json --iam-account terraform-sa@${project_id}.iam.gserviceaccount.com
@@ -34,7 +34,7 @@ cd ..
 
 # Update kubeconfig
 echo "--------------------Update Kubeconfig--------------------"
-gcloud container clusters get-credentials ${cluster_name} --region ${region} --project ${project_id}
+gcloud container clusters get-credentials ${cluster_name} --region ${zone} --project ${project_id}
 
 # Remove preious docker images
 echo "--------------------Remove Previous build--------------------"
