@@ -17,17 +17,27 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-central-1
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
       - name: Set up Kubectl
         uses: azure/setup-kubectl@v1
         with:
           version: 'latest'
+
+      # - name: Install Google Cloud SDK
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get install -y apt-transport-https ca-certificates gnupg
+      #     echo "deb https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+      #     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+      #     sudo apt-get update && sudo apt-get install -y google-cloud-sdk
+      
+      # - name: Authenticate kubectl with GKE
+      #   run: |
+      #     gcloud container clusters get-credentials ${{ secrets.CLUSTER_NAME }} --zone your-cluster-zone --project ${{ secrets.GCP_PROJECT }}
 
       - name: Verify kubectl
         run: |
