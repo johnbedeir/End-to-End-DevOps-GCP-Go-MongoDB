@@ -35,17 +35,17 @@ jobs:
           curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
           sudo apt-get update && sudo apt-get install -y google-cloud-sdk
       
-      # - name: Install gke-gcloud-auth-plugin
-      #   run: |
-      #     gcloud components install gke-gcloud-auth-plugin -q
+      - name: Install gke-gcloud-auth-plugin
+        run: |
+          gcloud components install gke-gcloud-auth-plugin -q
       
-      # - name: Configure kubectl to use the gke-gcloud-auth-plugin
-      #   run: |
-      #     echo "export USE_GKE_GCLOUD_AUTH_PLUGIN=True" >> $GITHUB_ENV
-
+      - name: Configure kubectl to use the gke-gcloud-auth-plugin
+        run: |
+          echo "export USE_GKE_GCLOUD_AUTH_PLUGIN=True" >> $GITHUB_ENV
+          
       - name: Authenticate kubectl with GKE
         run: |
-          gcloud container clusters get-credentials ${{ secrets.CLUSTER_NAME }} --zone ${{ secrets.REGION }} --project ${{ secrets.GCP_PROJECT }}
+          gcloud container clusters get-credentials ${{ secrets.CLUSTER_NAME }} --region ${{ secrets.REGION }} --project ${{ secrets.GCP_PROJECT }}
 
       - name: Verify kubectl
         run: |
