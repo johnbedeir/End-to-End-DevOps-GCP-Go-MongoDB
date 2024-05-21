@@ -3,3 +3,4 @@
 *tfstate*
 *.json
 .history
+*.out

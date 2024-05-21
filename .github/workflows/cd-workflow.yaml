@@ -1,19 +1,17 @@
 name: Continuous Deployment
 
 on:
-  push:
-    branches: [ main ]
-  # workflow_run:
-  #   workflows: ["Continuous Integration"]
-  #   types:
-  #     - completed
+  workflow_run:
+    workflows: ["Continuous Integration"]
+    types:
+      - completed
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     
     # Check if the CI workflow was successful
-    #if: github.event.workflow_run.conclusion == 'success'
+    if: github.event.workflow_run.conclusion == 'success'
     
     steps:
       - name: Checkout code
@@ -43,7 +41,7 @@ jobs:
 
       - name: Authenticate kubectl with GKE
         run: |
-          gcloud container clusters get-credentials ${{ secrets.CLUSTER_NAME }} --zone ${{ secrets.REGION }} --project ${{ secrets.GCP_PROJECT }}
+          gcloud container clusters get-credentials ${{ secrets.CLUSTER_NAME }} --zone ${{ secrets.ZONE }} --project ${{ secrets.GCP_PROJECT }}
 
       - name: Verify kubectl
         run: |
