@@ -130,6 +130,51 @@ To interact with your application and add data to the MongoDB database:
 
 After sending the data, you should be able to verify that the new entries have been added to the database by using Studio 3T or MongoDB Compass to inspect the relevant collection within your MongoDB database.
 
+## CI/CD Workflows
+
+This project is equipped with GitHub Actions workflows to automate the Continuous Integration (CI) and Continuous Deployment (CD) processes.
+
+### Continuous Integration Workflow
+
+The CI workflow is triggered on pushes to the `main` branch. It performs the following tasks:
+
+- Checks out the code from the repository.
+- Configures GCP credentials using secrets stored in the GitHub repository.
+- Authenticate docker with GCP.
+- Builds the Docker image for the Go Survey app.
+- Tags the image and pushes it to the GCR.
+
+### Continuous Deployment Workflow
+
+The CD workflow is triggered upon the successful completion of the CI workflow. It performs the following tasks:
+
+- Checks out the code from the repository.
+- Configures GCP credentials using secrets stored in the GitHub repository.
+- Sets up `kubectl` with the required Kubernetes version.
+- Install Google Cloud SDK and the required plugins.
+- Configure `kubectl` to use the GKE
+- Authenticate `kubectl` with GKE.
+- Deploys the Kubernetes manifests found in the `k8s` directory to the EKS cluster.
+
+### Setting Up GitHub Secrets for GCP
+
+Before using the GitHub Actions workflows, you need to set up the GCP credentials as secrets in your GitHub repository. The included `github_secrets.sh` script automates the process of adding your GCP credentials to GitHub Secrets, which are then used by the workflows. To use this script:
+
+1. Ensure you have the GitHub CLI (`gh`) installed and authenticated.
+2. Run the script with the following command:
+
+   ```bash
+   ./github_secrets.sh
+   ```
+
+This script will:
+
+- Ensure all the `keys` for the used `service account` are deleted.
+- Generate new `key` for the `service account` and encrypt it using `base64`.
+- Use the GitHub CLI to set these as secrets in your GitHub repository `GCP_CREDENTIALS`, `GCP_PROJECT`, `CLUSTER_NAME`, and `ZONE`.
+
+**Note**: It's crucial to handle GCP credentials securely. The provided script is for demonstration purposes, and in a production environment, you should use a secure method to inject these credentials into your CI/CD pipeline.
+
 ## Destroying the Infrastructure
 
 In case you need to tear down the infrastructure and services that you have deployed, a script named `destroy.sh` is provided in the repository. This script will:

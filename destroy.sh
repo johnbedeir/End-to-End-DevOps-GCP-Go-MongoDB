@@ -2,6 +2,9 @@
 project_id="johnydev"
 repo_name="goapp-survey"
 
+# Get GCP credentials
+gcloud iam service-accounts keys create terraform/gcp-credentials.json --iam-account terraform-sa@${project_id}.iam.gserviceaccount.com
+
 #GCR Authentication
 echo "--------------------Authenticate Docker with GCR--------------------"
 gcloud auth configure-docker
